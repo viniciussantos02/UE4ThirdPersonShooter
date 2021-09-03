@@ -12,8 +12,13 @@ class THIRDPERSONSHOOTER_API AShooterCharacter : public ACharacter
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(EditAnywhere)
+		float RotationRate = 10.f;
+
 	void MoveForward(float AxisValue);
 	void Strafe(float AxisValue);
+	void LookUpRate(float AxisValue);
+	void LookRightRate(float AxisValue);
 
 protected:
 	// Called when the game starts or when spawned
