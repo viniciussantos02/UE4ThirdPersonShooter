@@ -2,6 +2,7 @@
 
 
 #include "ShooterCharacter.h"
+#include "ThirdPersonShooter/Actors/GunBase.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -16,6 +17,12 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Gun = GetWorld()->SpawnActor<AGunBase>(GunClass);
+
+	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+
+	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	Gun->SetOwner(this);
 }
 
 // Called every frame
@@ -49,11 +56,13 @@ void AShooterCharacter::Strafe(float AxisValue)
 	AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
+//JoyStick
 void AShooterCharacter::LookUpRate(float AxisValue)
 {
 	AddControllerPitchInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
 
+//JoyStick
 void AShooterCharacter::LookRightRate(float AxisValue)
 {
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
