@@ -4,6 +4,8 @@
 #include "GunBase.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SceneComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AGunBase::AGunBase()
@@ -32,3 +34,58 @@ void AGunBase::Tick(float DeltaTime)
 
 }
 
+void AGunBase::PullTrigger()
+{
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));	
+
+	if (OwnerPawn != nullptr)
+	{
+		if (OwnerController != nullptr)
+		{
+			FVector LineTraceEnd = GetLineTraceEnd();
+
+			FHitResult Hit;
+
+			bool bSucces = GetWorld()->LineTraceSingleByChannel(
+				OUT Hit,
+				ViewPointLocation,
+				LineTraceEnd,
+				ECollisionChannel::ECC_GameTraceChannel1
+			);
+
+			if (bSucces)
+			{
+				FVector ShotDirection = -ViewPointRotation.Vector();
+
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, ShotDirection.Rotation());
+
+				ApplyDamage(Hit, ShotDirection);
+			}
+		}
+	}
+}
+
+FVector AGunBase::GetLineTraceEnd()
+{
+	OwnerController->GetPlayerViewPoint(OUT ViewPointLocation, OUT ViewPointRotation);
+
+	return ViewPointLocation + ViewPointRotation.Vector() * MaxLineRange;
+}
+
+void AGunBase::ApplyDamage(const FHitResult& Hit, const FVector& ShotDirection)
+{
+	AActor* HitActor = Hit.GetActor();
+
+	if (HitActor != nullptr)
+	{
+		FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
+		HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+	}
+}
+
+void AGunBase::SetupGun()
+{
+	OwnerPawn = Cast<APawn>(GetOwner());
+
+	OwnerController = OwnerPawn->GetController();
+}
