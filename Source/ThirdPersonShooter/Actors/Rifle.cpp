@@ -2,6 +2,7 @@
 
 
 #include "Rifle.h"
+#include "Kismet/GameplayStatics.h"
 
 ARifle::ARifle()
 {
@@ -21,5 +22,12 @@ void ARifle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ARifle::PullTrigger()
+{
+	AGunBase::PullTrigger();
+
+	UE_LOG(LogTemp, Warning, TEXT("Rifle Shooting"));
 }
 

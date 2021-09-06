@@ -15,16 +15,18 @@ class THIRDPERSONSHOOTER_API ARifle : public AGunBase
 	GENERATED_BODY()
 	
 private:
-
+	
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
+	// Sets default values for this actor's properties
+	ARifle();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Sets default values for this actor's properties
-	ARifle();
+	virtual void PullTrigger() override;
 };
