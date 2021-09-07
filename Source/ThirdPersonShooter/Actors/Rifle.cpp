@@ -28,6 +28,5 @@ void ARifle::PullTrigger()
 {
 	AGunBase::PullTrigger();
 
-	UE_LOG(LogTemp, Warning, TEXT("Rifle Shooting"));
 }
 

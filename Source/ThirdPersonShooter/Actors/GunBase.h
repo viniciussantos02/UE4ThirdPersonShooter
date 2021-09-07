@@ -24,10 +24,10 @@ private:
 	USkeletalMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
-	float MaxLineRange = 1000;
+	float MaxLineRange = 1000.f;
 
 	UPROPERTY(EditAnywhere)
-	float Damage = 20;
+	float Damage = 20.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Particles")
 	UParticleSystem* ImpactEffect;

@@ -23,8 +23,9 @@ AGunBase::AGunBase()
 // Called when the game starts or when spawned
 void AGunBase::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();	
 	
+	SetupGun();
 }
 
 // Called every frame
@@ -79,13 +80,14 @@ void AGunBase::ApplyDamage(const FHitResult& Hit, const FVector& ShotDirection)
 	if (HitActor != nullptr)
 	{
 		FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
+
 		HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
 	}
 }
 
 void AGunBase::SetupGun()
 {
-	OwnerPawn = Cast<APawn>(GetOwner());
+	OwnerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);	
 
-	OwnerController = OwnerPawn->GetController();
+	OwnerPawn = OwnerController->GetPawn();
 }
