@@ -2,6 +2,7 @@
 
 
 #include "ShooterCharacter.h"
+#include "Components/CapsuleComponent.h"
 #include "ThirdPersonShooter/Actors/GunBase.h"
 
 // Sets default values
@@ -10,6 +11,7 @@ AShooterCharacter::AShooterCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Health = MaxHealth;
 }
 
 // Called when the game starts or when spawned
@@ -72,7 +74,6 @@ void AShooterCharacter::Shoot()
 float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	DamageToApply = FMath::Min(Health, DamageToApply);
 
 	Health -= DamageToApply;
@@ -84,8 +85,6 @@ float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 void AShooterCharacter::SetupPlayer()
 {
-	Health = MaxHealth;
-
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
 
 	Gun = GetWorld()->SpawnActor<AGunBase>(GunClass);
@@ -93,3 +92,15 @@ void AShooterCharacter::SetupPlayer()
 	Gun->SetOwner(this);
 }
 
+bool AShooterCharacter::IsPlayerDead() const
+{
+	if (Health <= 0.f)
+	{
+		UCapsuleComponent* Capsule = FindComponentByClass<UCapsuleComponent>();
+		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		return true;
+	}
+
+	return false;
+}

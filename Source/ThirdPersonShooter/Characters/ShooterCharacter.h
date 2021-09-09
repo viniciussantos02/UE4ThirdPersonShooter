@@ -41,6 +41,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UFUNCTION(BlueprintPure)
+	bool IsPlayerDead() const;
+
 	// Sets default values for this character's properties
 	AShooterCharacter();
 
