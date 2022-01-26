@@ -16,9 +16,12 @@ class THIRDPERSONSHOOTER_API AShooterAIController : public AAIController
 {
 	GENERATED_BODY()
 
+public:
+	bool IsDead() const;
+
 private:
-	UPROPERTY()
-	AShooterCharacter* PlayerPawn;
+	UPROPERTY(EditAnywhere)
+	class UBehaviorTree* AIBehavior;
 
 	UPROPERTY(EditAnywhere)
 	float AIDistanceFromPlayer = 200.f;

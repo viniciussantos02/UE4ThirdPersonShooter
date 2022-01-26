@@ -32,8 +32,7 @@ private:
 	void MoveForward(float AxisValue);
 	void Strafe(float AxisValue);
 	void LookUpRate(float AxisValue);
-	void LookRightRate(float AxisValue);
-	void Shoot();
+	void LookRightRate(float AxisValue);	
 	void SetupPlayer();
 
 protected:
@@ -43,6 +42,8 @@ protected:
 public:
 	UFUNCTION(BlueprintPure)
 	bool IsPlayerDead() const;
+
+	void Shoot();
 
 	// Sets default values for this character's properties
 	AShooterCharacter();

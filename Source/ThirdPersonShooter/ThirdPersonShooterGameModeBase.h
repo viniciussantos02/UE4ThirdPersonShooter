@@ -14,4 +14,6 @@ class THIRDPERSONSHOOTER_API AThirdPersonShooterGameModeBase : public AGameModeB
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void PawnKilled(APawn* PawnKilled);
 };

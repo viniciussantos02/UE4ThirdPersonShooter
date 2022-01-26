@@ -14,7 +14,6 @@ class THIRDPERSONSHOOTER_API AGunBase : public AActor
 private:
 	FVector ViewPointLocation;
 	FRotator ViewPointRotation;
-	APawn* OwnerPawn;
 	AController* OwnerController;
 
 	UPROPERTY(VisibleAnywhere)
@@ -37,7 +36,7 @@ private:
 	
 	FVector GetLineTraceEnd();
 	void ApplyDamage(const FHitResult& Hit, const FVector& ShotDirection);
-	void SetupGun();
+	AController* GetGunOwnerController();
 
 protected:
 	// Called when the game starts or when spawned

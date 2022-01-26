@@ -4,6 +4,7 @@
 #include "ShooterCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "ThirdPersonShooter/Actors/GunBase.h"
+#include "ThirdPersonShooter/ThirdPersonShooterGameModeBase.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -80,6 +81,19 @@ float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
 
+	if (IsPlayerDead())
+	{				
+		AThirdPersonShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<AThirdPersonShooterGameModeBase>();
+
+		if (GameMode)
+		{
+			GameMode->PawnKilled(this);
+		}
+
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+
 	return DamageToApply;
 }
 
@@ -96,9 +110,6 @@ bool AShooterCharacter::IsPlayerDead() const
 {
 	if (Health <= 0.f)
 	{
-		UCapsuleComponent* Capsule = FindComponentByClass<UCapsuleComponent>();
-		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 		return true;
 	}
 
